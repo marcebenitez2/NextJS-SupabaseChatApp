@@ -32,7 +32,7 @@ function ChatHeader({ user }) {
 
   return (
     <div className="h-20">
-      <div className="p-5 border-b w-full flex justify-between items-center">
+      <div className="p-5 border-b w-full flex justify-between items-center h-full">
         <div>
           <h1 className="text-xl font-bold">Hoy</h1>
           <div className="flex items-center gap-1">
