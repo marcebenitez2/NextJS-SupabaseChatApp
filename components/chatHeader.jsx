@@ -10,12 +10,16 @@ function ChatHeader({ user }) {
   const handleLoginWhitGitHub = () => {
     const supabase = supabaseBrowser();
 
-    supabase.auth.signInWithOAuth({
-      provider: "github",
-      options: {
-        redirectTo: location.origin + "/auth/callback",
-      },
-    });
+    try {
+      supabase.auth.signInWithOAuth({
+        provider: "github",
+        options: {
+          redirectTo: location.origin + "/auth/callback",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleLogout = async () => {
@@ -26,7 +30,6 @@ function ChatHeader({ user }) {
     router.refresh();
   };
 
-  
   return (
     <div className="h-20">
       <div className="p-5 border-b w-full flex justify-between items-center">
