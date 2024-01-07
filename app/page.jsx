@@ -1,23 +1,20 @@
+import ChatHeader from "@/components/chatHeader";
+import InitUser from "@/lib/store/initUser";
+import { supabaseServer } from "@/lib/supabase/server";
 import React from "react";
-import { Button } from "@/components/ui/button";
 
-export default function Page() {
+export default async function Page() {
+  const supabase = supabaseServer();
+  const { data, error } = await supabase.auth.getSession();
+
   return (
-    <div className="max-w-3xl mx-auto md:py-10 h-screen">
-      <div className="h-full border rounded-md">
-        <div className="h-20">
-          <div className="p-5 border-b w-full flex justify-between items-center">
-            <div>
-              <h1 className="text-xl font-bold">Hoy</h1>
-              <div className="flex items-center gap-1">
-                <div className="h-4 w-4 bg-green-500 rounded-full animate-pulse"></div>
-                <h1 className="text-sm text-gray-400">2 onlines</h1>
-              </div>
-            </div>
-            <Button>Logout</Button>
-          </div>
+    <>
+      <div className="max-w-3xl mx-auto md:py-10 h-screen">
+        <div className="h-full border rounded-md">
+          <ChatHeader user={data.session?.user} />
         </div>
       </div>
-    </div>
+      <InitUser user={data.session?.user} />
+    </>
   );
 }
