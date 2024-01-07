@@ -1,5 +1,3 @@
-import { format } from "date-fns";
-import { es } from "date-fns/locale"; // Importar el locale en español
 import Image from "next/image";
 import React from "react";
 
@@ -19,7 +17,7 @@ function Message({ message }) {
         <div className="flex items-center gap-1">
           <h1 className="font-bold">{message.users?.display_name}</h1>
           <h1 className="text-sm text-gray-400">
-            {format(new Date(message.created_at), "dd/MM/yyyy HH:mm", { locale: es })}
+            {new Date(message.created_at).toDateString()}
           </h1>
         </div>
         <p className="text-gray-300">{message.text}</p>
