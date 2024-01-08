@@ -7,7 +7,7 @@ import { supabaseBrowser } from "@/lib/supabase/browser";
 import { toast } from "sonner";
 
 function ListMessages() {
-  const { messages, addMessage } = useMessage((state) => state);
+  const { messages, addMessage, optimisticIds } = useMessage((state) => state);
   const supabase = supabaseBrowser();
   useEffect(() => {
     const channel = supabase
@@ -15,20 +15,23 @@ function ListMessages() {
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "messages" },
+
         async (payload) => {
-          const { error, data } = await supabase
-            .from("users")
-            .select("*")
-            .eq("id", payload.new.send_by)
-            .single();
-          if (error) {
-            toast.error(error.message);
-          } else {
-            const newMessage = {
-              ...payload.new,
-              users: data,
-            };
-            addMessage(newMessage);
+          if (optimisticIds.includes(payload.new.id)) {
+            const { error, data } = await supabase
+              .from("users")
+              .select("*")
+              .eq("id", payload.new.send_by)
+              .single();
+            if (error) {
+              toast.error(error.message);
+            } else {
+              const newMessage = {
+                ...payload.new,
+                users: data,
+              };
+              addMessage(newMessage);
+            }
           }
         }
       )
@@ -37,7 +40,7 @@ function ListMessages() {
     return () => {
       channel.unsubscribe();
     };
-  }, []);
+  }, [messages]);
 
   return (
     <div className="flex-1 flex flex-col p-5 h-full overflow-y-auto">

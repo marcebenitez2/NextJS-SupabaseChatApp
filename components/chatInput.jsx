@@ -14,6 +14,8 @@ function ChatInput() {
 
   const addMessage = useMessage((state) => state.addMessage);
 
+  const setOptimisticIds = useMessage((state) => state.setOptimisticIds);
+
   const handleSendMessage = async (message) => {
     if (message.trim()) {
       const newMessage = {
@@ -31,6 +33,7 @@ function ChatInput() {
       };
 
       addMessage(newMessage);
+      setOptimisticIds(newMessage.id);
 
       const { error } = await supabase
         .from("messages")
