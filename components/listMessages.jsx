@@ -1,11 +1,43 @@
 "use client";
 import { useMessage } from "@/lib/store/messages";
-import React from "react";
+import React, { useEffect } from "react";
 import { Message } from "./message";
 import { DeleteAlert, EditAlert } from "./messageActions";
+import { supabaseBrowser } from "@/lib/supabase/browser";
+import { toast } from "sonner";
 
 function ListMessages() {
-  const messages = useMessage((state) => state.messages);
+  const { messages, addMessage } = useMessage((state) => state);
+  const supabase = supabaseBrowser();
+  useEffect(() => {
+    const channel = supabase
+      .channel("chat-room")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "messages" },
+        async (payload) => {
+          const { error, data } = await supabase
+            .from("users")
+            .select("*")
+            .eq("id", payload.new.send_by)
+            .single();
+          if (error) {
+            toast.error(error.message);
+          } else {
+            const newMessage = {
+              ...payload.new,
+              users: data,
+            };
+            addMessage(newMessage);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, []);
 
   return (
     <div className="flex-1 flex flex-col p-5 h-full overflow-y-auto">

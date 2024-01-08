@@ -33,6 +33,7 @@ export function Message({ message }) {
             <h1 className="text-sm text-gray-400">
               {new Date(message.created_at).toDateString()}
             </h1>
+            {message.is_edit && <h1 className="text-gray-400">edited</h1>}
           </div>
           {message.users?.id === user.id && <MessageMenu message={message} />}
         </div>

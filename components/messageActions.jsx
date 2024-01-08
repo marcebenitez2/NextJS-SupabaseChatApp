@@ -53,12 +53,12 @@ export function EditAlert() {
         toast.error(error.message);
       } else {
         toast.success("Message updated successfully");
+        document.getElementById("trigger-edit")?.click();
       }
     } else {
-      toast.error("No se puede enviar un mensaje vacio");
+      document.getElementById("trigger-edit")?.click();
+      document.getElementById("trigger-delete")?.click();
     }
-
-    document.getElementById("trigger-edit")?.click();
   };
 
   return (
