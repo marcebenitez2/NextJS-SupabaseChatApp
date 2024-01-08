@@ -1,7 +1,7 @@
 "use client";
 import { useMessage } from "@/lib/store/messages";
 import React from "react";
-import Message from "./message";
+import { Message } from "./message";
 
 function ListMessages() {
   const messages = useMessage((state) => state.messages);

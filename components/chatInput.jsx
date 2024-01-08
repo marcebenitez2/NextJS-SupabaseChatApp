@@ -15,28 +15,32 @@ function ChatInput() {
   const addMessage = useMessage((state) => state.addMessage);
 
   const handleSendMessage = async (message) => {
-    const newMessage = {
-      id: uuidv4(),
-      text: message,
-      send_by: user?.id,
-      is_edit: false,
-      create_at: new Date().toString(),
-      users: {
-        id: user?.id,
-        avatar_url: user?.user_metadata.avatar_url,
-        display_name: user?.user_metadata.user_name,
+    if (message.trim()) {
+      const newMessage = {
+        id: uuidv4(),
+        text: message,
+        send_by: user?.id,
+        is_edit: false,
         create_at: new Date().toString(),
-      },
-    };
+        users: {
+          id: user?.id,
+          avatar_url: user?.user_metadata.avatar_url,
+          display_name: user?.user_metadata.user_name,
+          create_at: new Date().toString(),
+        },
+      };
 
-    addMessage(newMessage);
+      addMessage(newMessage);
 
-    const { error } = await supabase
-      .from("messages")
-      .insert([{ text: message }]);
+      const { error } = await supabase
+        .from("messages")
+        .insert([{ text: message }]);
 
-    if (error) {
-      toast.error(error.message);
+      if (error) {
+        toast.error(error.message);
+      }
+    } else {
+      toast.error("No se puede enviar un mensaje vacio");
     }
   };
 

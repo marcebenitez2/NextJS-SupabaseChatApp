@@ -1,7 +1,19 @@
 import Image from "next/image";
 import React from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
+import { useUser } from "@/lib/store/user";
 
-function Message({ message }) {
+export function Message({ message }) {
+  const user = useUser((state) => state.user);
+
   return (
     <div className="flex gap-2">
       <div>
@@ -14,11 +26,14 @@ function Message({ message }) {
         />
       </div>
       <div className="flex-1">
-        <div className="flex items-center gap-1">
-          <h1 className="font-bold">{message.users?.display_name}</h1>
-          <h1 className="text-sm text-gray-400">
-            {new Date(message.created_at).toDateString()}
-          </h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <h1 className="font-bold">{message.users?.display_name}</h1>
+            <h1 className="text-sm text-gray-400">
+              {new Date(message.created_at).toDateString()}
+            </h1>
+          </div>
+          {message.users?.id === user.id && <MessageMenu />}
         </div>
         <p className="text-gray-300">{message.text}</p>
       </div>
@@ -26,4 +41,18 @@ function Message({ message }) {
   );
 }
 
-export default Message;
+const MessageMenu = () => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <MoreHorizontal />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>Action</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem>Delete</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
