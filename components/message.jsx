@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { useUser } from "@/lib/store/user";
+import { useMessage } from "@/lib/store/messages";
 
 export function Message({ message }) {
   const user = useUser((state) => state.user);
@@ -33,7 +34,7 @@ export function Message({ message }) {
               {new Date(message.created_at).toDateString()}
             </h1>
           </div>
-          {message.users?.id === user.id && <MessageMenu />}
+          {message.users?.id === user.id && <MessageMenu message={message} />}
         </div>
         <p className="text-gray-300">{message.text}</p>
       </div>
@@ -41,7 +42,9 @@ export function Message({ message }) {
   );
 }
 
-const MessageMenu = () => {
+const MessageMenu = ({ message }) => {
+  const setActionMessage = useMessage((state) => state.setActionMessage);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -54,6 +57,7 @@ const MessageMenu = () => {
         <DropdownMenuItem
           onClick={() => {
             document.getElementById("trigger-delete")?.click();
+            setActionMessage(message);
           }}
         >
           Delete
