@@ -9,6 +9,8 @@ import { toast } from "sonner";
 function ListMessages() {
   const { messages, addMessage, optimisticIds } = useMessage((state) => state);
   const supabase = supabaseBrowser();
+
+
   useEffect(() => {
     const channel = supabase
       .channel("chat-room")
@@ -41,6 +43,9 @@ function ListMessages() {
       channel.unsubscribe();
     };
   }, [messages]);
+
+  
+
 
   return (
     <div className="flex-1 flex flex-col p-5 h-full overflow-y-auto">
