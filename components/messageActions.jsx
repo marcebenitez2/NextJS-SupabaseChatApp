@@ -69,9 +69,7 @@ export function EditAlert() {
       <DialogContent className="w-full">
         <DialogHeader>
           <DialogTitle>Edit Message</DialogTitle>
-          <DialogDescription>
-            Esto es para editar mensajes
-          </DialogDescription>
+          <DialogDescription>Esto es para editar mensajes</DialogDescription>
         </DialogHeader>
         <Input defaultValue={actionMessage?.text} ref={inputRef} />
         <DialogFooter>
@@ -115,8 +113,7 @@ export function DeleteAlert() {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            Are you sure you want to delete the message permanently?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
