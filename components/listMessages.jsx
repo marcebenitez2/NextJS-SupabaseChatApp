@@ -1,15 +1,16 @@
 "use client";
 import { useMessage } from "@/lib/store/messages";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Message } from "./message";
 import { DeleteAlert, EditAlert } from "./messageActions";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { toast } from "sonner";
 
 function ListMessages() {
+  const scrollRef = useRef();
+
   const { messages, addMessage, optimisticIds } = useMessage((state) => state);
   const supabase = supabaseBrowser();
-
 
   useEffect(() => {
     const channel = supabase
@@ -19,7 +20,8 @@ function ListMessages() {
         { event: "*", schema: "public", table: "messages" },
 
         async (payload) => {
-          if (optimisticIds.includes(payload.new.id)) {
+          console.log(payload);
+          if (!optimisticIds.includes(payload.new.id)) {
             const { error, data } = await supabase
               .from("users")
               .select("*")
@@ -44,11 +46,19 @@ function ListMessages() {
     };
   }, [messages]);
 
-  
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
 
+    if (scrollContainer) {
+      scrollContainer.scrollTop = scrollContainer.scrollHeight;
+    }
+  }, [messages]);
 
   return (
-    <div className="flex-1 flex flex-col p-5 h-full overflow-y-auto">
+    <div
+      className="flex-1 flex flex-col p-5 h-full overflow-y-auto"
+      ref={scrollRef}
+    >
       <div className="flex-1"></div>
       <div className="space-y-5">
         {messages.map((value, index) => {

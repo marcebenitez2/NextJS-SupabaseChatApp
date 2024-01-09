@@ -70,7 +70,7 @@ export function EditAlert() {
         <DialogHeader>
           <DialogTitle>Edit Message</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Esto es para editar mensajes
           </DialogDescription>
         </DialogHeader>
         <Input defaultValue={actionMessage?.text} ref={inputRef} />
