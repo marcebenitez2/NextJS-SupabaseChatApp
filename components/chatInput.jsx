@@ -49,15 +49,21 @@ function ChatInput() {
 
   return (
     <div className="p-5">
-      <Input
-        placeholder="Enviar mensaje"
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            handleSendMessage(e.currentTarget.value);
-            e.currentTarget.value = "";
-          }
-        }}
-      />
+      {user ? (
+        <Input
+          placeholder="Enviar mensaje"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSendMessage(e.currentTarget.value);
+              e.currentTarget.value = "";
+            }
+          }}
+        />
+      ) : (
+        <div className="text-center text-gray-500">
+          Inicia sesión para enviar un mensaje
+        </div>
+      )}
     </div>
   );
 }
